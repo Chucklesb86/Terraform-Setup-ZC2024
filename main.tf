@@ -8,14 +8,14 @@ terraform {
 }
 
 provider "google" {
-    credentials = "./keys/river-autumn-414819-277db6b86847.json"
-  project = "river-autumn-414819"
-  region  = "us-central1"
+  credentials = var.credentials
+  project     = var.project
+  region      = var.region
 }
 
 resource "google_storage_bucket" "demo-bucket" {
-  name          = "river-autumn-414819-terra-bucket"
-  location      = "US"
+  name          = var.gcs_bucket_name
+  location      = var.location
   force_destroy = true
 
   lifecycle_rule {
@@ -26,4 +26,10 @@ resource "google_storage_bucket" "demo-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+
+resource "google_bigquery_dataset" "demo_dataset" {
+  dataset_id = var.bq_dataset_name
+  location   = var.location
 }
